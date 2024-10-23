@@ -1,0 +1,38 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:CarrotTest.Templates">
+
+  <!--
+    Additional resources 
+    Using Control Themes:
+         https://docs.avaloniaui.net/docs/basics/user-interface/styling/control-themes
+    Using Theme Variants:
+         https://docs.avaloniaui.net/docs/guides/styles-and-resources/how-to-use-theme-variants
+  -->
+  
+  <Design.PreviewWith>
+    <StackPanel Width="400" Spacing="10">      
+        <StackPanel Background="{DynamicResource SystemRegionBrush}">
+          <controls:ComboList />
+        </StackPanel>
+    </StackPanel>
+  </Design.PreviewWith>
+ 
+  <ControlTheme x:Key="{x:Type controls:ComboList}" TargetType="controls:ComboList">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <ComboBox
+          ItemsSource="{Binding Roles, RelativeSource={RelativeSource TemplatedParent}}"
+          SelectedIndex="{Binding User.Role, RelativeSource={RelativeSource TemplatedParent}}"
+          
+          HorizontalAlignment="Stretch">
+          <ComboBox.ItemTemplate>
+            <DataTemplate >
+              <TextBlock Text="{Binding Name}"/>
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

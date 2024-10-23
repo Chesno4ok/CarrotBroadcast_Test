@@ -6,8 +6,11 @@ using Avalonia.Threading;
 using CarrotTest.Models;
 using CarrotTest.Views;
 using Microsoft.EntityFrameworkCore;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Models;
 using ReactiveUI;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Text.Json;
@@ -28,6 +31,7 @@ public class MainViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> SaveCommand { get; set; }
     public ReactiveCommand<Unit, Unit> OpenUserCreationCommand { get; set; }
     public ReactiveCommand<User, Unit> DeleteCommand { get; set; }
+    public ReactiveCommand<Unit, Unit> ExitCommand { get; set; }
 
     public MainViewModel()
     {
@@ -39,6 +43,7 @@ public class MainViewModel : ViewModelBase
         SaveCommand = ReactiveCommand.CreateFromTask(SaveChanges);
         OpenUserCreationCommand = ReactiveCommand.CreateFromTask(OpenUserCreation);
         DeleteCommand = ReactiveCommand.CreateFromTask<User, Unit>(DeleteUser);
+        ExitCommand = ReactiveCommand.CreateFromTask(Exit);
     }
 
     public async Task OpenUserCreation()
@@ -112,6 +117,47 @@ public class MainViewModel : ViewModelBase
         dbContext.Users.AddRange(newUsers);
 
         dbContext.SaveChanges();
+
+    }
+
+    public async Task Exit()
+    {
+        var mainWindow = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop ? desktop.MainWindow : null;
+
+        var box = MessageBoxManager.GetMessageBoxCustom(new MsBox.Avalonia.Dto.MessageBoxCustomParams()
+        {
+            ButtonDefinitions = new List<ButtonDefinition>
+                {
+                    new ButtonDefinition { Name = "Да", },
+                    new ButtonDefinition { Name = "Нет", },
+                    new ButtonDefinition { Name = "Отмена", }
+                },
+            ContentTitle = "Выход",
+            WindowStartupLocation = WindowStartupLocation.CenterOwner,
+            CanResize = false,
+            ShowInCenter = true,
+            ContentMessage = "Сохранить изменения?"
+        });
+
+        var result = await box.ShowAsync();
+
+        switch (result)
+        {
+            case "Да":
+                await SaveChanges();
+                mainWindow.Close();
+                break;
+
+            case "Нет":
+                mainWindow.Close();
+                break;
+
+            default:
+                break;
+        }
+        
+
+        
 
     }
 }

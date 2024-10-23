@@ -23,7 +23,7 @@
           <MenuItem Header="Сохранить" Command="{Binding SaveCommand}"/>
           <MenuItem Header="Создать" Command="{Binding OpenUserCreationCommand}"/>
           <Separator/>
-          <MenuItem Header="Выйти"/>
+          <MenuItem Header="Выйти" Command="{Binding ExitCommand}"/>
         </MenuItem>
       </Menu>
       <Separator/>
@@ -67,10 +67,8 @@
                     <Button
                       Background="Transparent"
                       HorizontalAlignment="Stretch"
-                    
                       Name="Button"
                       Content="{Binding Notes, Mode=TwoWay}">
-
                       <Button.Styles>
                         <Style Selector="Button:pointerover /template/ ContentPresenter">
                           <Setter Property="Background" Value="Transparent"/>
@@ -82,6 +80,8 @@
                           <TextBox
                             Text="{Binding ElementName=Button, Path=Content,Mode=TwoWay}"
                             Width="300"
+                            AcceptsTab=""
+                            AcceptsReturn="True"
                             TextWrapping="Wrap"/>
                         </Flyout>
                       </Button.Flyout>

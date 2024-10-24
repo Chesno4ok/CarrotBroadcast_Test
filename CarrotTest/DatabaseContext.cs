@@ -28,8 +28,12 @@ public partial class DatabaseContext : DbContext
     {
         modelBuilder.Entity<User>(entity =>
         {
+            entity.HasIndex(e => e.Role, "IX_Users_Role");
+
             entity.HasOne(d => d.RoleNavigation).WithMany(p => p.Users).HasForeignKey(d => d.Role);
         });
+
+        modelBuilder.Entity<Role>().Property(i => i.Id).ValueGeneratedNever();
 
         OnModelCreatingPartial(modelBuilder);
     }

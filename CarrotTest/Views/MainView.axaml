@@ -8,109 +8,103 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="CarrotTest.Views.MainView"
              x:DataType="vm:MainViewModel">
+
   <Design.DataContext>
     <!-- This only sets the DataContext for the previewer in an IDE,
          to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
     <vm:MainViewModel />
-    
   </Design.DataContext>
+
   <Grid RowDefinitions="50,*">
-    <StackPanel
-      Spacing="1"
-              Grid.Row="0">
+    <StackPanel Spacing="1" Grid.Row="0">
       <Menu VerticalAlignment="Top">
         <MenuItem Header="Настройки">
-          <MenuItem Header="Сохранить" Command="{Binding SaveCommand}"/>
-          <MenuItem Header="Создать" Command="{Binding OpenUserCreationCommand}"/>
-          <Separator/>
-          <MenuItem Header="Выйти" Command="{Binding ExitCommand}"/>
+          <MenuItem Header="Сохранить" Command="{Binding SaveCommand}" />
+          <MenuItem Header="Создать" Command="{Binding OpenUserCreationCommand}" />
+          <Separator />
+          <MenuItem Header="Выйти" Command="{Binding ExitCommand}" />
         </MenuItem>
       </Menu>
-      <Separator/>
+      <Separator />
     </StackPanel>
-          
-    <DataGrid
-          Grid.Row="1"
-          Name="Grid"
-          VerticalAlignment="Stretch"
-          ItemsSource="{Binding Users}"
-          CanUserReorderColumns="False"
-          SelectionMode="Single"
-          CanUserResizeColumns="True">
-            <DataGrid.ContextMenu>
-              <ContextMenu>
-                <MenuItem Header="Удалить"
-                          Command="{Binding DeleteCommand}"
-                          CommandParameter="{Binding ElementName=Grid, Path=SelectedItem}"/>
-              </ContextMenu>
-            </DataGrid.ContextMenu>
-            <DataGrid.Columns>
-              <DataGridTextColumn Header="Имя" Binding="{Binding Name}"/>
-              <DataGridTextColumn Header="Фамилия" Binding="{Binding LastName}"/>
-              <DataGridTextColumn Header="Логин" Binding="{Binding Login}"/>
-              <DataGridTextColumn Header="Пароль" Binding="{Binding Password}"/>
-              <DataGridTextColumn Header="Почта" Binding="{Binding Email}"/>
-              <DataGridTemplateColumn 
-                                      SortMemberPath="Notes"
-                                      Header="Заметки"
-                                      MaxWidth="400">
-                <DataGridTemplateColumn.CellTemplate>
-                  <DataTemplate DataType="model:User">
-                    <TextBlock Text="{Binding Notes, Mode=TwoWay}"
-                               Margin="9,0,0,0"
-                               MaxHeight="30"
-                               VerticalAlignment="Center"/>
-                  </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
 
-                <DataGridTemplateColumn.CellEditingTemplate>
-                  <DataTemplate DataType="model:User">
-                    <Button
-                      Background="Transparent"
+    <DataGrid Grid.Row="1"
+              Name="Grid"
+              VerticalAlignment="Stretch"
+              ItemsSource="{Binding Users}"
+              CanUserReorderColumns="False"
+              SelectionMode="Single"
+              CanUserResizeColumns="True">
+
+      <DataGrid.ContextMenu>
+        <ContextMenu>
+          <MenuItem Header="Удалить"
+                    Command="{Binding DeleteCommand}"
+                    CommandParameter="{Binding ElementName=Grid, Path=SelectedItem}" />
+        </ContextMenu>
+      </DataGrid.ContextMenu>
+
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="Имя" Binding="{Binding Name}" />
+        <DataGridTextColumn Header="Фамилия" Binding="{Binding LastName}" />
+        <DataGridTextColumn Header="Логин" Binding="{Binding Login}" />
+        <DataGridTextColumn Header="Пароль" Binding="{Binding Password}" />
+        <DataGridTextColumn Header="Почта" Binding="{Binding Email}" />
+
+        <DataGridTemplateColumn SortMemberPath="Notes" Header="Заметки" MaxWidth="400">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate DataType="model:User">
+              <TextBlock Text="{Binding Notes, Mode=TwoWay}"
+                         Margin="9,0,0,0"
+                         MaxHeight="30"
+                         VerticalAlignment="Center" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+
+          <DataGridTemplateColumn.CellEditingTemplate>
+            <DataTemplate DataType="model:User">
+              <Button Background="Transparent"
                       HorizontalAlignment="Stretch"
                       Name="Button"
                       MaxHeight="30"
                       Content="{Binding Notes, Mode=TwoWay}">
-                      <Button.Styles>
-                        <Style Selector="Button:pointerover /template/ ContentPresenter">
-                          <Setter Property="Background" Value="Transparent"/>
-                        </Style>
-                      </Button.Styles>
+                <Button.Styles>
+                  <Style Selector="Button:pointerover /template/ ContentPresenter">
+                    <Setter Property="Background" Value="Transparent" />
+                  </Style>
+                </Button.Styles>
 
-                      <Button.Flyout>
-                        <Flyout ShowMode="Transient">
-                          <TextBox
-                            Text="{Binding ElementName=Button, Path=Content,Mode=TwoWay}"
-                            Width="300"
-                            AcceptsTab=""
-                            AcceptsReturn="True"
-                            TextWrapping="Wrap"/>
-                        </Flyout>
-                      </Button.Flyout>
-                    </Button>
-                  </DataTemplate>
-                </DataGridTemplateColumn.CellEditingTemplate>
+                <Button.Flyout>
+                  <Flyout ShowMode="Transient">
+                    <TextBox Text="{Binding ElementName=Button, Path=Content, Mode=TwoWay}"
+                             Width="300"
+                             AcceptsTab=""
+                             AcceptsReturn="True"
+                             TextWrapping="Wrap" />
+                  </Flyout>
+                </Button.Flyout>
+              </Button>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellEditingTemplate>
+        </DataGridTemplateColumn>
 
-              </DataGridTemplateColumn>
+        <DataGridTemplateColumn SortMemberPath="Role" Header="Уровень доступа">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate DataType="model:User">
+              <TextBlock Margin="15,0,0,0"
+                         VerticalAlignment="Center"
+                         Text="{Binding RoleNav.Name}" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
 
-              <!--<DataGridTextColumn Header="Заметки" Binding="{Binding Notes}"/>-->
-              <DataGridTemplateColumn SortMemberPath="Role"  Header="Уровень доступа">
+          <DataGridTemplateColumn.CellEditingTemplate>
+            <DataTemplate DataType="model:User">
+              <controls:ComboList User="{Binding ElementName=Grid, Path=SelectedItem}" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellEditingTemplate>
+        </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn.CellTemplate>
-                  <DataTemplate DataType="model:User">
-                    <TextBlock
-                      Margin="15,0,0,0"
-                      VerticalAlignment="Center"
-                      Text="{Binding RoleNav.Name}"/>
-                  </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>
-                <DataGridTemplateColumn.CellEditingTemplate>
-                  <DataTemplate DataType="model:User">
-                    <controls:ComboList User="{Binding ElementName=Grid, Path=SelectedItem}"/>
-                  </DataTemplate>
-                </DataGridTemplateColumn.CellEditingTemplate>
-              </DataGridTemplateColumn>
-            </DataGrid.Columns>
-          </DataGrid>
-        </Grid>
+      </DataGrid.Columns>
+    </DataGrid>
+  </Grid>
 </UserControl>

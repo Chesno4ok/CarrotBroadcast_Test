@@ -22,7 +22,6 @@ namespace CarrotTest.ViewModels
             set => this.RaiseAndSetIfChanged(ref _user, value);
         }
 
-
         public string _errorMessage;
         public string ErrorMessage
         {

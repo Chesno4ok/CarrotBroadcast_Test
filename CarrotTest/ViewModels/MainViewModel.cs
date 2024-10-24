@@ -11,6 +11,7 @@ using MsBox.Avalonia.Models;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Text.Json;
@@ -37,6 +38,12 @@ public class MainViewModel : ViewModelBase
     {
         using var dbContext = new DatabaseContext();
 
+        if (!File.Exists("Database.db"))
+        {
+            AddMockUsers();
+        }
+
+
         // Добавляем в таблицу пользователей из БД
         Roles = new(dbContext.Roles.AsEnumerable());
         // Также добавляем существующие роли
@@ -47,7 +54,81 @@ public class MainViewModel : ViewModelBase
         OpenUserCreationCommand = ReactiveCommand.CreateFromTask(OpenUserCreation);
         DeleteCommand = ReactiveCommand.CreateFromTask<User, Unit>(DeleteUser);
         ExitCommand = ReactiveCommand.CreateFromTask(Exit);
+
+        
     }
+
+    public void AddMockUsers()
+    {
+        using var dbContext = new DatabaseContext();
+        dbContext.Database.Migrate();
+
+        var users = new User[]
+        {
+            new User()
+            {
+                Name = "Екатерина",
+                LastName = "Пучкова",
+                Login = "8gsaf76d",
+                Password = "Hudf7833",
+                Email = "example@mail.org",
+                Role = 1,
+                Notes = "Хорший сотрудник"
+            },
+            new User()
+            {
+                Name = "Алексей",
+                LastName = "Иванов",
+                Login = "ivanov123",
+                Password = "Pass123!",
+                Email = "alexey@mail.org",
+                Role = 2,
+                Notes = "Отличный программист"
+            },
+            new User()
+            {
+                Name = "Марина",
+                LastName = "Козлова",
+                Login = "marina88",
+                Password = "Zxcvbnm12",
+                Email = "marina.kozlova@mail.ru",
+                Role = 3,
+                Notes = "Работает с клиентами"
+            }
+        };
+
+        var roles = new Role[]
+        {
+            new Role()
+            {
+                Id = 0,
+                Name = "Гость"
+            },
+            new Role()
+            {
+                Id = 1,
+                Name = "Пользователь"
+            },
+            new Role()
+            {
+                Id = 2,
+                Name = "Модератор"
+            },
+            new Role()
+            {
+                Id = 3,
+                Name = "Администратор"
+            }
+        };
+
+        
+
+        dbContext.Users.AddRange(users);
+        dbContext.Roles.AddRange(roles);
+
+        dbContext.SaveChanges();
+    }
+    
 
     public async Task OpenUserCreation()
     {

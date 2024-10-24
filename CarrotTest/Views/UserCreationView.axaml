@@ -6,30 +6,33 @@
              xmlns:vm="clr-namespace:CarrotTest.ViewModels"
              x:Class="CarrotTest.Views.UserCreationView"
              x:DataType="vm:UserCreationViewModel">
+
   <Grid>
-    <StackPanel
-       Spacing="10">
-      <TextBox Watermark="Имя" Text="{Binding User.Name}"/>
-      <TextBox Watermark="Фамилия" Text="{Binding User.LastName}"/>
-      <TextBox Watermark="Логин" Text="{Binding User.Login}"/>
-      <TextBox Watermark="Пароль" Text="{Binding User.Password}"/>
-      <TextBox Watermark="Электронная почта" Text="{Binding User.Email}"/>
-      <ComboBox
-        HorizontalAlignment="Stretch"
-        ItemsSource="{Binding Roles}"
-        SelectedIndex="{Binding User.Role}">
+    <StackPanel Spacing="10">
+      <TextBox Watermark="Имя" Text="{Binding User.Name}" />
+      <TextBox Watermark="Фамилия" Text="{Binding User.LastName}" />
+      <TextBox Watermark="Логин" Text="{Binding User.Login}" />
+      <TextBox Watermark="Пароль" Text="{Binding User.Password}" />
+      <TextBox Watermark="Электронная почта" Text="{Binding User.Email}" />
+
+      <ComboBox HorizontalAlignment="Stretch"
+                ItemsSource="{Binding Roles}"
+                SelectedIndex="{Binding User.Role}">
         <ComboBox.ItemTemplate>
           <DataTemplate>
-            <TextBlock Text="{Binding Name}"/>
+            <TextBlock Text="{Binding Name}" />
           </DataTemplate>
         </ComboBox.ItemTemplate>
       </ComboBox>
-      <TextBox Watermark="Заметки" TextWrapping="Wrap" Text="{Binding User.Notes}"/>
-      <TextBlock Text="{Binding ErrorMessage}" Foreground="Red"/>
+
+      <TextBox Watermark="Заметки" TextWrapping="Wrap" Text="{Binding User.Notes}" />
+      <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" />
+
       <DockPanel>
         <Button Content="Сохранить" Command="{Binding SaveUserCommand}" />
-        <Button Content="Отменить" Command="{Binding ExitCommand}"/>
+        <Button Content="Отменить" Command="{Binding ExitCommand}" />
       </DockPanel>
     </StackPanel>
   </Grid>
+
 </UserControl>

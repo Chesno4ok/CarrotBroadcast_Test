@@ -37,9 +37,12 @@ public class MainViewModel : ViewModelBase
     {
         using var dbContext = new DatabaseContext();
 
+        // Добавляем в таблицу пользователей из БД
         Roles = new(dbContext.Roles.AsEnumerable());
+        // Также добавляем существующие роли
         Users = new(dbContext.Users.AsEnumerable());
 
+        
         SaveCommand = ReactiveCommand.CreateFromTask(SaveChanges);
         OpenUserCreationCommand = ReactiveCommand.CreateFromTask(OpenUserCreation);
         DeleteCommand = ReactiveCommand.CreateFromTask<User, Unit>(DeleteUser);
@@ -48,12 +51,16 @@ public class MainViewModel : ViewModelBase
 
     public async Task OpenUserCreation()
     {
+        // Создаем диалоговое окно
         var dialog = new DialogWindow();
 
+        // Получаем главное окно, чтобы к нему прикрепить диалог
         var mainWindow = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop ? desktop.MainWindow : null;
 
         dialog.ShowDialog(mainWindow);
 
+
+        // Создаем VM и распределяем комманды
         var vm = new UserCreationViewModel();
 
         vm.ExitCommand = ReactiveCommand.CreateFromTask(() =>
@@ -95,6 +102,7 @@ public class MainViewModel : ViewModelBase
     {
         var dbContext = new DatabaseContext();
 
+        // Редактируем записи из БД
         foreach(var user in Users)
         {
             var editUser = dbContext.Users.FirstOrDefault(i => i.Id == user.Id);
@@ -105,9 +113,11 @@ public class MainViewModel : ViewModelBase
             editUser.CopyPropertiesFrom(user);
         }
 
+        // Удаление пользователей
         var removedUsers = dbContext.Users.Where(i => !Users.Contains(i));
         dbContext.RemoveRange(removedUsers);
 
+        // Добавлени новых
         var newUsers = Users.Where(i => i.Id == 0);
         dbContext.Users.AddRange(newUsers);
 

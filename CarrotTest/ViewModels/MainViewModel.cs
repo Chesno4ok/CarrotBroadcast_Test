@@ -97,67 +97,27 @@ public class MainViewModel : ViewModelBase
 
         foreach(var user in Users)
         {
-            var newUser = dbContext.Users.FirstOrDefault(i => i.Id == user.Id);
+            var editUser = dbContext.Users.FirstOrDefault(i => i.Id == user.Id);
 
-            if (newUser == null)
+            if (editUser == null)
                 continue;
 
-            newUser.CopyPropertiesFrom(user);
-
-            dbContext.SaveChanges();
+            editUser.CopyPropertiesFrom(user);
         }
 
         var removedUsers = dbContext.Users.Where(i => !Users.Contains(i));
-
         dbContext.RemoveRange(removedUsers);
 
-
         var newUsers = Users.Where(i => i.Id == 0);
-
         dbContext.Users.AddRange(newUsers);
 
-        dbContext.SaveChanges();
-
+        await dbContext.SaveChangesAsync();
     }
 
     public async Task Exit()
     {
         var mainWindow = Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop ? desktop.MainWindow : null;
 
-        var box = MessageBoxManager.GetMessageBoxCustom(new MsBox.Avalonia.Dto.MessageBoxCustomParams()
-        {
-            ButtonDefinitions = new List<ButtonDefinition>
-                {
-                    new ButtonDefinition { Name = "Да", },
-                    new ButtonDefinition { Name = "Нет", },
-                    new ButtonDefinition { Name = "Отмена", }
-                },
-            ContentTitle = "Выход",
-            WindowStartupLocation = WindowStartupLocation.CenterOwner,
-            CanResize = false,
-            ShowInCenter = true,
-            ContentMessage = "Сохранить изменения?"
-        });
-
-        var result = await box.ShowAsync();
-
-        switch (result)
-        {
-            case "Да":
-                await SaveChanges();
-                mainWindow.Close();
-                break;
-
-            case "Нет":
-                mainWindow.Close();
-                break;
-
-            default:
-                break;
-        }
-        
-
-        
-
+        mainWindow.Close();
     }
 }

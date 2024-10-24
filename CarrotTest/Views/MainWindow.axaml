@@ -10,5 +10,5 @@
         Icon="/Assets/avalonia-logo.ico"
         Title="Управление пользователями">
          
-        <views:MainView />
+        <views:MainView Name="View" />
 </Window>

@@ -58,6 +58,7 @@
                   <DataTemplate DataType="model:User">
                     <TextBlock Text="{Binding Notes, Mode=TwoWay}"
                                Margin="9,0,0,0"
+                               MaxHeight="30"
                                VerticalAlignment="Center"/>
                   </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
@@ -68,6 +69,7 @@
                       Background="Transparent"
                       HorizontalAlignment="Stretch"
                       Name="Button"
+                      MaxHeight="30"
                       Content="{Binding Notes, Mode=TwoWay}">
                       <Button.Styles>
                         <Style Selector="Button:pointerover /template/ ContentPresenter">
